@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Friend Management</title>
+</head>
+<body>
+  <div class="delete_modal_container">
+    <div class="delete_modal_content">
+      <h2>Delete confirmation</h2>
+      <p>Do you want to delete this item?</p>
+      <div class="delete_modal_divider"></div>
+      <button class="btn-confirm" type="button" onclick="onclickDeleteConfirm()">Confirm</button>
+      <button class="btn-cancel" type="button" onclick="closeDeleteModal()">Cancel</button>
+    </div>
+  </div>
+  <div class="modal_container">
+    <div class="modal_content">
+      <form>
+        <h3 class="modal_title"></h3>
+        <div class="input-element">
+          <label for="name">Name</label>
+          <input type="text" name="name" id="name" placeholder="HongGildong" value="">
+          <p class="warning" id="warning-name">The name's length must be between 1 ~ 30.</p>
+        </div>
+    
+        <div class="input-element">
+          <label for="phonenumber">Phone Number</label>
+          <input type="text" name="phonenumber" id="phonenumber" placeholder="xxx-xxxx-xxxx" value="">
+          <p class="warning" id="warning-phonenumber">Invalid form of Phone Number.</p>
+        </div>
+    
+        <div class="input-element">
+          <label for="birthday">Birthday</label>
+          <input type="text" name="birthday" id="birthday" placeholder="00/00" value="">
+          <p class="warning" id="warning-birthday">Invalid form of birthday.</p>
+        </div>
+    
+        <div class="input-element">
+          <label for="relation">Relation</label>
+          <input type="text" name="relation" id="relation" placeholder="coworker" value="">
+          <p class="warning" id="warning-relation">Relation input cannot be the blank.</p>
+        </div>
+    
+        <div class="input-element">
+          <label for="nationality">Nationality</label>
+          <input type="text" name="nationality" id="nationality" placeholder="Korea" value="">
+          <p class="warning" id="warning-nationality">Nationality input cannot be the blank.</p>
+        </div>
+    
+        <div class="input-element">
+          <label for="city">City</label>
+          <input type="text" name="city" id="city" placeholder="Seoul" value="">
+          <p class="warning" id="warning-city">City input cannot be the blank.</p>
+        </div>
+        
+        <button class="btn-submit" type="button" onclick="onclickSubmit()">Submit</button>
+        <button class="btn-cancel" type="button" onclick="onclickCancel()">Cancel</button>
+      </form>
+    </div>
+  </div>
+  <h3>Friend List</h3>
+  <button class="btn-add" onclick="openModal('add')">Add</button>
+  <div class="content-box">
+    <div class="list-element-title">
+      <div class="row-item">Name</div>
+      <div class="row-item">PhoneNumber</div>
+      <div class="row-item">Birthday</div>
+      <div class="row-item">Relation</div>
+      <div class="row-item">Nationality</div>
+      <div class="row-item">City</div>
+      <div class="row-item">Menu</div>
+    </div>
+    <ol class="list-box">
+
+    </ol>
+  </div>
+</body>
+<style>
+  .delete_modal_container {
+    position: absolute;
+    display: none;
+    
+    justify-content: center;
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  .delete_modal_divider {
+    background-color: royalblue;
+    width: 100%;
+    height: 1.5px;
+    margin: 20px 0px;
+  }
+
+  .delete_modal_content {
+    position: absolute;
+    top:50%;
+
+    width:400px; 
+    height:100px;
+
+    padding: 20px 30px 80px 30px;  
+    text-align: center;
+
+    background-color: rgb(255,255,255);
+    border-radius:10px;
+    box-shadow:0 2px 3px 0 rgba(34,36,38,0.15);
+
+    transform: translateY(-50%);
+  }
+
+  .modal_container {
+    position: absolute;
+    display: none;
+    
+    justify-content: center;
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    background-color: rgba(0,0,0,0.4);
+  }
+
+  .modal_content {
+    position: absolute;
+    top:50%;
+
+    width:400px; 
+    height:600px;
+
+    padding: 20px 30px 80px 30px;  
+    text-align: center;
+
+    background-color: rgb(255,255,255);
+    border-radius:10px;
+    box-shadow:0 2px 3px 0 rgba(34,36,38,0.15);
+
+    transform: translateY(-50%);
+  }
+
+  [class*="btn-"] {
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .btn-add {
+    float: right;
+    background-color: royalblue;
+    color: white;
+    padding: 8px 17.5px 8px 17.5px;
+  }
+  
+  /* Global CSS above */
+  
+  .list-element-title {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    text-align: left;
+  }
+  
+  .list-element-title .row-item {
+    font-weight: bold;
+  }
+  
+  .list-box {
+    padding: 0px;
+  }
+  
+  .list-element a {
+    text-decoration: none;
+  }
+  
+  .list-element:first-child {
+    border-top: 1px solid grey;
+  }
+  
+  .list-element {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-evenly;
+    text-align: left;
+    border-bottom: 1px solid grey;
+  }
+  
+  .list-element:nth-child(odd) {
+    background-color: rgb(219, 219, 219);
+  }
+  
+  .list-element:nth-child(even) {
+    background-color: whitesmoke;
+  }
+  
+  .row-item {
+    display: inline-block;
+    width: 20%;
+    padding: 10px;
+  }
+  
+  .btn-edit {
+    width: 70px;
+    height: 25px;
+    background-color: royalblue;
+    color: white;
+  }
+  
+  .btn-delete {
+    width: 70px;
+    height: 25px;
+    background-color: crimson;
+    color: white;
+    padding: 5px 10px 5px 10px;
+  }
+  
+  /* index.html above */
+  .input-element {
+    width: 92%;
+    justify-content: center;
+    padding: 5px 2.5px 5px 2.5px;
+  }
+  
+  .input-element label {
+    display: block;
+    color: royalblue;
+    padding: 2.5px 0px;
+    font-size: 10pt;
+    font-weight: bold;
+    text-align: left;
+  }
+  
+  .input-element input {
+    width: 100%;
+    height: 25px;
+    padding: 2.5px 10px;
+    border: 2px solid royalblue;
+    border-radius: 5px;
+  }
+  
+  .warning {
+    display: block;
+    visibility: hidden;
+    font-size: 10pt;
+    color: tomato;
+    margin: 5px;
+  }
+  
+  .btn-submit, .btn-confirm {
+    border: 1.5px royalblue solid;
+    background-color: royalblue;
+    color: white;
+    padding: 8px 17.5px 8px 17.5px;
+  }
+  
+  .btn-cancel {
+    border: 1.5px royalblue solid;
+    background-color: white;
+    color: royalblue;
+    padding: 8px 17.5px 8px 17.5px;
+  }
+
+  /* view.html above */
+  @media (max-width: 650px) {
+    .row-item {
+      font-size: 8pt;
+    }
+  
+    .btn-edit {
+      width: 50px;
+      height: 20px;
+      background-color: royalblue;
+      color: white;
+      font-size: 8pt;
+    }
+    
+    .btn-delete {
+      width: 50px;
+      height: 20px;
+      background-color: crimson;
+      color: white;
+      padding: 2.5px 5px 2.5px 5px;
+      font-size: 8pt;
+    }
+  }
+</style>
+<script>
+  window.onload = function() {
+    event.preventDefault();
+    fetchDatas();
+  }
+  
+  let btn;
+  let dataState = "add";
+  let curSelectedId = "";
+
+  const list = document.querySelector('.list-box');
+
+  const nameInput = document.querySelector('#name');
+  const nameWarning = document.querySelector('#warning-name');
+
+  const phonenumberInput = document.querySelector('#phonenumber');
+  const phonenumberWarning = document.querySelector('#warning-phonenumber');
+
+  const birthdayInput = document.querySelector('#birthday');
+  const birthdayWarning = document.querySelector('#warning-birthday');
+
+  const relationInput = document.querySelector('#relation');
+  const relationWarning = document.querySelector('#warning-relation');
+
+  const nationalityInput = document.querySelector('#nationality');
+  const nationalityWarning = document.querySelector('#warning-nationality');
+
+  const cityInput = document.querySelector('#city');
+  const cityWarning = document.querySelector('#warning-city');
+
+  function openModal(state) {
+    dataState = state;
+    modalTitle = document.querySelector(".modal_title");
+    modalTitle.textContent = state + " data";
+    modal = document.querySelector(".modal_container");
+    modal.style.display = "flex";
+  }
+
+  function initializeModal() {
+    nameInput.value = "";
+    phonenumberInput.value = "";
+    birthdayInput.value = "";
+    relationInput.value = "";
+    nationalityInput.value = "";
+    cityInput.value = "";
+
+    nameWarning.style.visibility = 'hidden';
+    phonenumberWarning.style.visibility = 'hidden';
+    birthdayWarning.style.visibility = 'hidden';
+    relationWarning.style.visibility = 'hidden';
+    nationalityWarning.style.visibility = 'hidden';
+    cityWarning.style.visibility = 'hidden';
+  }
+
+  function closeModal() {
+    initializeModal();
+
+    modal = document.querySelector(".modal_container");
+    modal.style.display = "none";
+  }  
+
+  function openDeleteModal(button) {
+    const deleteModal = document.querySelector(".delete_modal_container");
+    deleteModal.style.display = "flex";
+
+    btn = button;
+  }
+
+  function closeDeleteModal() {
+    const deleteModal = document.querySelector(".delete_modal_container");
+    deleteModal.style.display = "none";
+  }
+
+  function onclickDeleteConfirm() {
+    deleteData(btn);
+    closeDeleteModal();
+  }
+
+  function onclickEdit(button) {
+    const listItem = button.closest('.list-element');
+
+    curSelectedId = listItem.dataset.id;
+    nameInput.value = listItem.querySelector('.row-item:nth-child(1)').textContent;
+    phonenumberInput.value = listItem.querySelector('.row-item:nth-child(2)').textContent;
+    birthdayInput.value = listItem.querySelector('.row-item:nth-child(3)').textContent;
+    relationInput.value = listItem.querySelector('.row-item:nth-child(4)').textContent;
+    nationalityInput.value = listItem.querySelector('.row-item:nth-child(5)').textContent;
+    cityInput.value = listItem.querySelector('.row-item:nth-child(6)').textContent;
+
+    openModal('modify');
+  }
+
+  function lengthValidation(value, maximum) {
+    if (value.trim().length <= 0) return false;
+    else if (value.trim().length > maximum) return false;
+    else return true;
+  }
+
+  function phoneValidation(value) {
+    phone = /^\d{3}-\d{4}-\d{4}$/;
+    return phone.test(value);
+  }
+
+  function dateValidation(value) {
+    date = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])$/;
+    return date.test(value);
+  }
+
+  function validationCheck() {
+    let name = true, 
+    phone = true, 
+    birthday = true, 
+    relation = true, 
+    nationality = true, 
+    city = true;
+
+    if (!lengthValidation(nameInput.value, 30)) {
+      nameWarning.style.visibility = 'visible';
+      name = false;
+    } else {
+      nameWarning.style.visibility = 'hidden';
+      name = true;
+    }
+
+    if (!phoneValidation(phonenumberInput.value)) {
+      phonenumberWarning.style.visibility = 'visible';
+      phone = false;
+    } else {
+      phonenumberWarning.style.visibility = 'hidden';
+      phone = true;
+    }
+
+    if (!dateValidation(birthdayInput.value, 5)) {
+      birthdayWarning.style.visibility = 'visible';
+      birthday = false;
+    } else {
+      birthdayWarning.style.visibility = 'hidden';
+      birthday = true;
+    }
+
+    if (!lengthValidation(relationInput.value, 999)) {
+      relationWarning.style.visibility = 'visible';
+      relation = false;
+    } else {
+      relationWarning.style.visibility = 'hidden';
+      relation = true;
+    }
+
+    if (!lengthValidation(nationalityInput.value, 999)) {
+      nationalityWarning.style.visibility = 'visible';
+      nationality = false;
+    } else {
+      nationalityWarning.style.visibility = 'hidden';
+      nationality = true;
+    }
+
+    if (!lengthValidation(cityInput.value, 999)) {
+      cityWarning.style.visibility = 'visible';
+      city = false;
+    } else {
+      cityWarning.style.visibility = 'hidden';
+      city = true;
+    }
+
+    if (name && phone && birthday && relation && nationality && city) return true;
+    else return false;
+  }
+
+  function onclickSubmit() {
+    if (validationCheck()) {
+      switch (dataState) {
+        case "add": 
+          addUser();
+          closeModal();
+        break;
+
+        case "modify":
+          modifyUser();
+          closeModal();
+        break;
+      }
+    }
+  }
+
+  function onclickCancel() {
+    closeModal();
+  }
+
+</script>
+<script>
+  const apiURL = "https://67283275270bd0b97554a345.mockapi.io/friends";
+
+  async function fetchDatas() {
+    try {
+      const box = document.querySelector(".list-box");
+      const response = await fetch(apiURL);
+      const friends = await response.json();
+      box.innerHTML = makeList(friends);
+    } catch (e) {
+      console.error("Error fetching data:", e);
+    }
+  }
+
+  async function addUser() {
+    let userData = {
+      id: Math.random().toString(),
+      name: nameInput.value, 
+      phonenumber: phonenumberInput.value, 
+      birthday: birthdayInput.value, 
+      relation: relationInput.value, 
+      nationality: nationalityInput.value, 
+      city: cityInput.value
+    }
+
+    try {
+      const response = await fetch(apiURL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+      if (response.ok) {
+        fetchDatas();
+        alert("Successfully added the data.");
+      } else {
+        console.error("Failed to add user.");
+      }
+    } catch (e) {
+      console.error("Error adding user:", e);
+    }
+  }
+
+  async function modifyUser() {
+    let modifiedData = { 
+      id: curSelectedId,
+      name: nameInput.value, 
+      phonenumber: phonenumberInput.value, 
+      birthday: birthdayInput.value, 
+      relation: relationInput.value, 
+      nationality: nationalityInput.value, 
+      city: cityInput.value
+    };
+
+    try {
+      const response = await fetch(`${apiURL}/${curSelectedId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(modifiedData),
+      });
+
+      if (response.ok) {
+        fetchDatas();
+        alert("Successfully modified the data.");
+      } else {
+        console.error("Failed to modify user.");
+      }
+    } catch (e) {
+      console.error("Error modifying user:", e);
+    }
+  }
+
+  async function deleteData(button) {
+    const listItem = button.closest('.list-element');
+    try {
+      const response = await fetch(`${apiURL}/${listItem.dataset.id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        fetchDatas();
+        alert("Successfully deleted the data.");
+      } else {
+        console.log("Failed to delete the data.")
+      }
+    } catch(e) {  
+      console.error("Error deleting user:", e);
+    }
+  }
+
+  function makeList(data) {
+    let str = "";
+    for (key in data) {
+      str += `<li class=list-element data-id=${data[key].id}>`;
+      str += `<div class=row-item>${data[key].name}</div>`;
+      str += `<div class="row-item">${data[key].phonenumber}</div>`;
+      str += `<div class="row-item">${data[key].birthday}</div>`;
+      str += `<div class="row-item">${data[key].relation}</div>`;
+      str += `<div class="row-item">${data[key].nationality}</div>`;
+      str += `<div class="row-item">${data[key].city}</div>`;
+      str += `<div class="row-item">`;
+      str += `<button class="btn-edit" onclick="onclickEdit(this)">Edit</button>`;
+      str += `<button class="btn-delete" onclick="openDeleteModal(this)">Delete</button>`;
+      str += `</div>`;
+    }
+    str += "</li>";
+
+    return str;
+  }
+</script>
+</html>
